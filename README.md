@@ -146,11 +146,11 @@ export function initConnection(options) {
     const db = mongoose.connection
 
     db.on('error', () => {
-        console.error('FAILED to connect to mongoose')
+        console.error('ERROR: Failed to connect to mongoose.')
     })
 
     db.once('open', () => {
-        console.log('Connected to mongoose')
+        console.log('DONE: Connected to mongoose.')
     })
 }
 ````
@@ -250,12 +250,70 @@ import express from 'express'
 const app = express()
 
 app.listen(3000, () => {
-    console.log("Express server is running!")
+    console.log("INFO: Express server is running!")
 })
 ```
 
 Chạy mongodb server trước khi gọi `npm start`. Nếu mọi thứ ok thì dưới console sẽ in ra:
 ```
-Connected to mongoose.
-Express server is running!
+INFO: Express server is running!
+DONE: Connected to mongoose.
 ```
+
+# Implement unit test
+Các bạn nên tìm hiếu về Testing và tại sao cần phải có Testing, đây là một mảng rộng và rất hàn lâm. Nhưng nói tóm tắt lại thì:
+
+1. Đảm bảo mọi thứ dev viết ra đều chạy đúng theo kịch bản, sẽ không có bất cứ sai sót nào trước thời điểm release của sản phẩm.
+2. Công đoạn refactor và maintain sẽ nhàn hơn.
+3. Các test case được viết ra vô tình như một document sống cho sản phẩm.
+
+Nhưng việc viết test sẽ tốn kha khá tài nguyên vì một phần phải lên kịch bản và viết ra các test case, nếu dự án yêu cầu về tiến độ thì thì không nên áp dụng. Hơn nữa, việc viết code để có thể test được cũng gây không ít phiền toái cho dev.
+
+Hiện tại thì testing có 2 keyword có độ nổi cao là **Unit Test** và **TDD** (Test Driven Development). Unit test đơn giản là việc test theo đơn vị (bất cứ thứ gì như: class, function, object... được gọi là các đơn vị, hay unit). TDD lại là phương thức để dev viết và chạy thử một test case.
+
+Bây giờ chúng ta đưa Unit test và cả DTT vào ứng dụng của mình. Với Unit test sẽ dùng `mocha`, một framework khá phổ biến ở thời điểm hiện tại
+
+```bash
+npm install mocha --save-dev
+```
+
+Thêm command `test` vào `scripts` trong `package.json`, command này sẽ tìm và chạy tất cả file có đuôi `.test.js` trong folder src.
+
+```json
+{
+    "scripts": {
+        "test": "mocha --require babel-core/register src/**/*.test.js"
+    }
+}
+```
+
+
+Lên kịch bản cho các test case đầu tiên
+- File config nên export ra địa chỉ để kết nốt đến database của mongodb server
+- Nên có một function để thực hiện việc kết nối đến mongodb server tên là initConnection
+
+Tiếp tục với `chai`, cung cấp một số api cần thiết để viết các test case:
+```bash
+npm install chai --save-dev
+```
+
+Tạo file `src/mongoose/initConnection.test.js`
+
+```javascript
+import { expect } from 'chai'
+
+import * as config from '/config'
+import * as initConnection from './initConnection'
+
+describe('Mongoose connection', () => {
+    it('Should have "mongoDbAddress" (mongodb database address) exported from configuration file', () => {
+        expect(config).to.have.property('mongoDbAddress')
+    })
+    it('Should have function to connect mongodb server named "initConnection"', () => {
+        expect(initConnection).to.have.property('initConnection')
+    })
+})
+```
+
+Thực thi command `npm test` để xem thưởng thức kết quả
+
