@@ -1,0 +1,1 @@
+exec "/mnt/c/Program Files/MongoDB/Server/3.6/bin/mongod.exe" --dbpath 'D:/mongodb/data'
