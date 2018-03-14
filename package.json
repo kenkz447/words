@@ -25,6 +25,7 @@
         "sinon-chai": "^2.14.0"
     },
     "scripts": {
+        "db": "mongod --dbpath 'C:\\Program Files\\MongoDB\\db'",
         "start": "babel-node index.js",
         "test": "mocha --require babel-core/register src/**/*.test.js"
     }

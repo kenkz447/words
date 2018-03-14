@@ -9,7 +9,7 @@ import {
     GraphQLID
 } from 'graphql/type'
 
-import { User, userAdd, userRemove, userQuery } from '/src/mongoose'
+import { User, userAdd, userRemove, userGet } from '/src/mongoose'
 import { getProjection } from '/src/graphql/utilities'
 
 const fields = {
@@ -39,7 +39,7 @@ export const userQuery = {
     resolve: (root, fields, source, fieldASTs) => {
         const excludes = ['password']
         const projections = getProjection(fieldASTs, excludes)
-        return userQuery(fields, projections)
+        return userGet(fields, projections)
     }
 }
 

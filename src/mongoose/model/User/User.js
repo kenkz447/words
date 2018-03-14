@@ -39,7 +39,7 @@ function saveNewUserToDb(newUser) {
 }
 //#endregion
 
-export function userQuery(props, projections) {
+export function userGet(props, projections) {
     return new Promise((resolve, reject) => {
         const params = {}
         for (const fieldKey in props) {

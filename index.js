@@ -1,4 +1,3 @@
-import path from 'path'
 import express from 'express'
 import bodyParser from 'body-parser'
 import graphqlHTTP from 'express-graphql'
@@ -20,5 +19,5 @@ app.use(bodyParser.urlencoded({ extended: false }))
 })))
 
 .listen(3000, () => {
-    console.log("Express server is running!")
+    console.log("INFO: Express server is running.")
 })

@@ -1,16 +1,16 @@
 import mongoose from 'mongoose'
 
 export function initConnection(options) {
-    const { connectionAddress } = options
+    const { mongoDbAddress } = options
 
-    mongoose.connect(connectionAddress)
+    mongoose.connect(mongoDbAddress)
     const db = mongoose.connection
 
     db.on('error', () => {
-        console.error('FAILED to connect to mongoose')
+        console.error('FAILED: to connect to mongoose.')
     })
 
     db.once('open', () => {
-        console.log('Connected to mongoose')
+        console.log('DONE: Connected to mongoose.')
     })
 }

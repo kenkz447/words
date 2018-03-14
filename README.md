@@ -8,20 +8,23 @@ Kịch bản của mình là tạo ra một website dưới dạng Single Page A
 1. Đăng nhập / đăng ký tài khoản
 2. Người dùng có thể Tạo và Lưu trữ danh sách các từ vựng cần học
 
-Vì là SPA nên ứng dụng sẽ đc chia làm 2 phần riêng biệt. Một Server backend để thêm/sửa/xóa/đọc dữ liệu dạng CRUD. Một server để chạy front-end. Vì ở phần này mình sẽ tập trung vào backend nên sẽ không có giao diện web để chạy thử các tính năng, nên chủ yếu sẽ sử dụng Postman để thao tác là chính. Qua đó các bạn cũng biết được cách để tạo một API Document và cách viết test cho nó.
+Vì là SPA nên ứng dụng sẽ đc chia làm 2 phần riêng biệt. Một Server backend để thêm/sửa/xóa/đọc dữ liệu dạng CRUD. Một server để chạy front-end phục vụ client. Vì ở phần này mình sẽ tập trung vào backend nên sẽ không có giao diện web để chạy thử các tính năng, nên chủ yếu sẽ sử dụng Postman để thao tác là chính. Qua đó các bạn cũng biết được cách để tạo một API Document và cách viết test cho nó.
 
-Cả 2 server đều chạy bằng nodejs, server backend cần cài đặt thêm mongodb.(chú ý, khi cài mongodb nên xử dụng các thông số mặc định)
+Cả 2 server đều chạy bằng nodejs, server backend cần cài đặt thêm mongodb. (chú ý, khi cài mongodb nên xử dụng các thông số mặc định)
 
 Quan trọng là bạn cần có kiến thứ cơ bản về javascript và nodejs trước khi theo bài viết này.
 
 ## Khởi tạo project
 
-Tạo thư mục mới tên `words-backend` và di chuyển đến thư mục vừa tạo. Sử dụng cli với cú pháp:
-`npm init` và sử dụng các thông số mặc định để khởi tạo(Enter mà không nhập không tin gì). đây là file `package.json` vừa được tạo ra :
+Tạo thư mục mới tên `words` và di chuyển đến thư mục vừa tạo. Sử dụng cli với cú pháp:
+```bash
+npm init
+```
+Sử dụng các thông số mặc định để khởi tạo(Enter mà không nhập  gì hết). đây là file `package.json` vừa được tạo ra :
 
 ````json
 {
-  "name": "words-backend",
+  "name": "words",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -187,7 +190,7 @@ Nên một số bộ biên dịch javascript-to-javascript như `babel` ra đờ
 npm install babel babel-cli --save-dev
 ```
 
-`--save-dev` là một command argument để lưu `babel babel-cli` vào devDependencies trong `package.js`. `devDependencies` là các module phục vụ cho việc code, biên dịch hay công việc linh tinh khác chứ không phải dùng trong quá trình sử dụng app.
+`--save-dev` là một command argument để lưu `babel babel-cli` vào devDependencies trong `package.json`. `devDependencies` là các module phục vụ cho việc code, biên dịch hay công việc linh tinh khác chứ không phải dùng trong quá trình sử dụng app.
 
 Sau khi các gói được cài đặt xong, chúng ta sẽ thêm một command để chạy app bằng babel, chỉnh sửa `package.json`:
 
@@ -222,13 +225,13 @@ import module from '../../../../foo'
 import module from 'src/foo'
 ```
 
-Cài đặt package:
+Để làm việc này, trước tiên cài đặt package `module-resolver`:
 
-```
+```bash
 npm install module-resolver --save-dev
-````
+```
 
-Và tạo file config `.babelrc`
+Và tạo file config `.babelrc` đặt ở root của project:
 
 ```json
 {
@@ -238,4 +241,21 @@ Và tạo file config `.babelrc`
         }]
     ]
 }
+```
+Tạm thời vậy là hoàn tất bước config cơ bản cho babel. Việc tiếp theo là khởi chạy app với express, thêm nội dung vào file `index.js`:
+
+```javascript
+import express from 'express'
+
+const app = express()
+
+app.listen(3000, () => {
+    console.log("Express server is running!")
+})
+```
+
+Chạy mongodb server trước khi gọi `npm start`. Nếu mọi thứ ok thì dưới console sẽ in ra:
+```
+Connected to mongoose.
+Express server is running!
 ```
