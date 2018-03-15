@@ -134,12 +134,12 @@ Cài đặt module **mongoose**
 ```
 npm install mongoose
 ```
-và tạo file theo đường dẫn `src/mongoose/initConnection.js`
+và tạo file theo đường dẫn `src/mongoose/openConnection.js`
 
 ````javascript
 import mongoose from 'mongoose'
 
-export function initConnection(options) {
+export function openConnection(options) {
     const { connectionAddress } = options
 
     mongoose.connect(connectionAddress)
@@ -158,28 +158,28 @@ export function initConnection(options) {
 và `src/mongoose/index.js`
 
 ```javascript
-export * from './initConnection'
+export * from './openConnection'
 ```
 
 Sử dụng file `index.js` mục đích quản lý các export từ trong folder, việc import module sau này cũng đơn giản hơn. Ví dụ:
 
 ```javascript
 // Có thể dùng
-import { initConnection } from 'src/mongoose'
+import { openConnection } from 'src/mongoose'
 // Thay vì
-import { initConnection } from 'src/mongoose/initConnection'
+import { openConnection } from 'src/mongoose/openConnection'
 ```
 
 Lưu ý, `import` và `export` là cú pháp của es6, vì vậy sẽ gây lỗi nếu không biên dịch thành `commonJS`(nodejs bắt buộc như vậy). Cho dễ hiểu:
 
 ```javascript
 // CommonJS, ok
-module.exports.initConnection = function initConnection(options) {
+module.exports.openConnection = function openConnection(options) {
 // logic here...
 }
 
 // Es6 Module, not ok
-export function initConnection(options) {
+export function openConnection(options) {
 // logic here...
 }
 ```
@@ -207,10 +207,10 @@ Từ đây trở về sau, ta dùng command `npm start` thay thế cho `node app
 Trở lại file `index.js`, chúng ta import các phần đã viết ở trước
 
 ```javascript
-import { initConnection } from '/src/mongoose'
+import { openConnection } from '/src/mongoose'
 import { mongoDbAddress } from '/config'
 
-initConnection({ mongoDbAddress })
+openConnection({ mongoDbAddress })
 ```
 
 `/src/mongoose` và `/config` là kiểu đường dẫn chúng ta tự setup cho babel. Việc setup như vậy giúp việc import dễ dàng và code trông đẹp hơn. Như:
@@ -290,27 +290,27 @@ Thêm command `test` vào `scripts` trong `package.json`, command này sẽ tìm
 
 Lên kịch bản cho các test case đầu tiên
 - File config nên export ra địa chỉ để kết nốt đến database của mongodb server
-- Nên có một function để thực hiện việc kết nối đến mongodb server tên là initConnection
+- Nên có một function để thực hiện việc kết nối đến mongodb server tên là openConnection
 
 Tiếp tục với `chai`, cung cấp một số api cần thiết để viết các test case:
 ```bash
 npm install chai --save-dev
 ```
 
-Tạo file `src/mongoose/initConnection.test.js`
+Tạo file `src/mongoose/openConnection.test.js`
 
 ```javascript
 import { expect } from 'chai'
 
 import * as config from '/config'
-import * as initConnection from './initConnection'
+import * as openConnection from './openConnection'
 
 describe('Mongoose connection', () => {
     it('Should have "mongoDbAddress" (mongodb database address) exported from configuration file', () => {
         expect(config).to.have.property('mongoDbAddress')
     })
-    it('Should have function to connect mongodb server named "initConnection"', () => {
-        expect(initConnection).to.have.property('initConnection')
+    it('Should have function to connect mongodb server named "openConnection"', () => {
+        expect(openConnection).to.have.property('openConnection')
     })
 })
 ```

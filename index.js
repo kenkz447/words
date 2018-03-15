@@ -3,10 +3,10 @@ import bodyParser from 'body-parser'
 import graphqlHTTP from 'express-graphql'
 
 import { schema } from '/src/graphql'
-import { initConnection } from '/src/mongoose'
+import { openConnection } from '/src/mongoose'
 import { mongoDbAddress } from '/config'
 
-initConnection({ mongoDbAddress })
+openConnection({ mongoDbAddress })
 
 const app = express()
 
