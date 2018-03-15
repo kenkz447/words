@@ -7,13 +7,8 @@ export function openConnection(options) {
         mongoose.connect(mongoDbAddress)
         const db = mongoose.connection
 
-        db.on('error', () => {
-            console.error('FAILED: to connect to mongoose.')
-        })
-
-        db.once('open', () => {
-            console.log('DONE: Connected to mongoose.')
-        })
+        db.on('error', reject)
+        db.once('open', reslove)
     })
 
     return promise
