@@ -1,0 +1,181 @@
+{
+	"info": {
+		"name": "Graphql and mongodb setup",
+		"_postman_id": "c0810df6-f6fc-bc0c-76ba-02f530ffa908",
+		"description": "# Introduction\nWhat does your API do?\n\n# Overview\nThings that the developers should know about\n\n# Authentication\nWhat is the preferred way of using the API?\n\n# Error Codes\nWhat errors and status codes can a user expect?\n\n# Rate limit\nIs there a limit to the number of requests an user can send?",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"description": "",
+			"item": [
+				{
+					"name": "Get all user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:3000/graphql?query={users{_id, username, password}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{users{_id, username, password}}",
+									"equals": true
+								}
+							]
+						},
+						"description": "Get all user"
+					},
+					"response": [
+						{
+							"id": "797ff4cc-f372-41e5-b1ef-8eb9357128ae",
+							"name": "Default",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "localhost:3000/graphql",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get user by _id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:3000/graphql?query={users(_id: \"5a8705f8fb58783e38590902\"){_id, username, password}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{users(_id: \"5a8705f8fb58783e38590902\"){_id, username, password}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:3000/graphql?query={users(username: \"root\"){_id, username, password}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{users(username: \"root\"){_id, username, password}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"mutation UserAdd($username: String!, $password: String!){ userAdd(username: $username, password: $password) { _id, username, password } }\",\n  \"variables\": {\n    \"username\": \"user\",\n    \"password\": \"user\"\n  }\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/graphql?",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Remove user by _id",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"mutation UserRemove($_id: ID!){ userRemove(_id: $_id) { _id } }\",\n  \"variables\": {\n    \"_id\": \"5a87aadb35f4a64d98478ccb\"\n  }\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/graphql?",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
