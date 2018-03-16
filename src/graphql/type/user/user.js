@@ -9,7 +9,7 @@ import {
     GraphQLID
 } from 'graphql/type'
 
-import { User, userAdd, userRemove, userGet } from '/src/mongoose'
+import { User, userCreate, userDelete, userGet } from '/src/mongoose'
 import { getProjection } from '/src/graphql/utilities'
 
 const fields = {
@@ -20,6 +20,10 @@ const fields = {
     username: {
         type: GraphQLString,
         description: 'The name of the user.',
+    },
+    email: {
+        type: GraphQLString,
+        description: 'The email of the user.',
     },
     password: {
         type: GraphQLString,
@@ -44,19 +48,20 @@ export const userQuery = {
 }
 
 export const userMuation = {
-    userAdd: {
+    userCreate: {
         type: userType,
         args: {
             username: fields.username,
-            password: fields.password
+            email: fields.email,
+            password: fields.password,
         },
-        resolve: userAdd
+        resolve: userCreate
     },
-    userRemove: {
+    userDelete: {
         type: userType,
         args: {
             _id: fields._id
         },
-        resolve: userRemove
+        resolve: userDelete
     }
 }

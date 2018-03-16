@@ -40,7 +40,7 @@
 					},
 					"response": [
 						{
-							"id": "797ff4cc-f372-41e5-b1ef-8eb9357128ae",
+							"id": "e6ce07f5-236a-494b-875a-2588e50960a8",
 							"name": "Default",
 							"originalRequest": {
 								"method": "GET",
@@ -131,7 +131,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"query\": \"mutation UserAdd($username: String!, $password: String!){ userAdd(username: $username, password: $password) { _id, username, password } }\",\n  \"variables\": {\n    \"username\": \"user\",\n    \"password\": \"user\"\n  }\n}"
+							"raw": "{\n  \"query\": \"mutation UserAdd($username: String!, $email: String!, $password: String!){ userAdd(username: $username, email: $email, password: $password) { _id, username, email, password } }\",\n  \"variables\": {\n    \"username\": \"admin\",\n    \"email\": \"admin@gmail.com\",\n    \"password\": \"admin123\"\n  }\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/graphql?",
@@ -159,7 +159,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"query\": \"mutation UserRemove($_id: ID!){ userRemove(_id: $_id) { _id } }\",\n  \"variables\": {\n    \"_id\": \"5a87aadb35f4a64d98478ccb\"\n  }\n}"
+							"raw": "{\n  \"query\": \"mutation UserDelete($_id: ID!){ userDelete(_id: $_id) { _id } }\",\n  \"variables\": {\n    \"_id\": \"5a87aadb35f4a64d98478ccb\"\n  }\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/graphql?",
@@ -172,6 +172,68 @@
 							]
 						},
 						"description": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Accounts",
+			"description": "",
+			"item": [
+				{
+					"name": "Get JWT",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"kenkz447@gmail.com\",\n\t\"password\": \"7a7p5zvbbz\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/getjwt",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"getjwt"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"new_user\",\n\t\"email\": \"new_user@gmail.com\",\n\t\"password\": \"new_user123\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/register",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"register"
+							]
+						},
+						"description": ""
 					},
 					"response": []
 				}

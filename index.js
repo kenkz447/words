@@ -1,12 +1,15 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import graphqlHTTP from 'express-graphql'
 
-import { schema } from '/src/graphql'
 import { openConnection } from '/src/mongoose'
 import { JwtFactory } from '/src/app'
+import { 
+    registerGetJWTRoute, 
+    registerGraphQLRoute, 
+    registerRegisterRoute 
+} from '/src/routes'
 
-import { mongoDbAddress } from '/config'
+import { mongoDbAddress, getJWTPath, registerPath } from '/config'
 
 async function doConnect() {
     try {
@@ -25,19 +28,18 @@ function doCreateApp() {
     // parse application/x-www-form-urlencoded
     app.use(bodyParser.urlencoded({ extended: false }))
         .use(bodyParser.json())
-        .use(jwtMiddleware)
-        .use('/graphql', graphqlHTTP((req, res) => {
-            return {
-                schema
-            }
-        }))
+        .use(jwtMiddleware.unless({ path: [getJWTPath, registerPath] }))
 
-    .listen(3000, () => {
+    registerGraphQLRoute(app)
+    registerGetJWTRoute(app)
+    registerRegisterRoute(app)
+
+    app.listen(3000, () => {
         console.log("INFO: Express server is running.")
     })
 }
 
-(function() {
+(function () {
     doConnect()
     doCreateApp()
 })()
