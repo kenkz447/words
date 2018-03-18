@@ -37,6 +37,6 @@
     "scripts": {
         "start": "babel-node index.js",
         "debug": "babel-node --nolazy --inspect-brk=9229 index.js",
-        "test": "mocha --timeout 15000 --require babel-polyfill --compilers js:babel-register babel-core/register src/**/*.test.js"
+        "test": "mocha --timeout 2000 --require babel-polyfill --compilers js:babel-register babel-core/register src/**/*.test.js"
     }
 }

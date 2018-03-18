@@ -3,8 +3,7 @@ import { hashPassword } from '/src/utilities'
 
 const { Schema } = mongoose
 
-const fields = {
-	id: String,
+export const fields = {
 	username: String,
 	email: String,
 	password: String
@@ -20,7 +19,6 @@ export const User = mongoose.model('User', userSchema)
 async function createUser(props) {
 	const { username, email, password } = props
 	const hashedPassword = await hashPassword(password)
-
 	return new User({
 		username,
 		email,
@@ -51,16 +49,20 @@ export function userGet(props, projections) {
 	})
 }
 
-export async function userCreate(props) {
+export async function userCreate(root, props) {
 	const newUser = await createUser(props)
 	return saveNewUserToDb(newUser)
 }
 
-export function userDelete(props) {
+export function userDelete(root, props) {
 	return new Promise(async (resolve, reject) => {
-		const target = User.findById(props._id)
-		target.remove((errors) => {
+		const callBack = (errors, result) => {
 			errors ? reject(errors) : resolve()
-		})
+		}
+		if (props._id !== null) {
+			User.findByIdAndRemove(props._id, callBack)
+		} else {
+			User.findOneAndRemove(props, callBack)
+		}
 	})
 }
