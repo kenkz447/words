@@ -3,19 +3,24 @@ import {
 	GraphQLSchema
 } from 'graphql/type'
 
-import { userQuery, userMuation } from './type'
+import {
+	userQuery, userMuation,
+	boardQuery, boardMuation
+} from './type'
 
 const rootQuery = new GraphQLObjectType({
 	name: 'query',
 	fields: {
-		users: userQuery
+		users: userQuery,
+		boards: boardQuery
 	}
 })
 
 export const rootMutation = new GraphQLObjectType({
 	name: 'mutation',
 	fields: () => ({
-		...userMuation
+		...userMuation,
+		...boardMuation
 	})
 })
 

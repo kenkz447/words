@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import mongoose from 'mongoose'
 
-import { fields, boardCreate, boardGet, boardDelete } from './Board'
+import { boardFields, boardCreate, boardGet, boardDelete } from './Board'
 
 import { openConnection } from 'src/mongoose/openConnection'
 import { mongoDbAddress } from '/config'
@@ -23,24 +23,24 @@ describe('Mongoose: Board', () => {
 	})
 
 	it('Should have an "name" field of type [function: String]', () => {
-		expect(fields).to.have.property('name')
-		expect(typeof fields.name).equals('function')
+		expect(boardFields).to.have.property('name')
+		expect(typeof boardFields.name).equals('function')
 	})
 	it('Should have an "langNative" field of type [function: String]', () => {
-		expect(fields).to.have.property('langNative')
-		expect(typeof fields.langNative).equals('function')
+		expect(boardFields).to.have.property('langNative')
+		expect(typeof boardFields.langNative).equals('function')
 	})
 	it('Should have an "langTarget" field of type [function: String]', () => {
-		expect(fields).to.have.property('langTarget')
-		expect(typeof fields.langTarget).equals('function')
+		expect(boardFields).to.have.property('langTarget')
+		expect(typeof boardFields.langTarget).equals('function')
 	})
 	it('Should have an "topic" field of type [function: String]', () => {
-		expect(fields).to.have.property('topic')
-		expect(typeof fields.topic).equals('function')
+		expect(boardFields).to.have.property('topic')
+		expect(typeof boardFields.topic).equals('function')
 	})
 	it('Should have an "user" field of type [function: String]', () => {
-		expect(fields).to.have.property('user')
-		expect(typeof fields.user).equals('function')
+		expect(boardFields).to.have.property('user')
+		expect(typeof boardFields.user).equals('function')
 	})
 	it('Should create board function working correctly', (done) => {
 		boardCreate(undefined, board)

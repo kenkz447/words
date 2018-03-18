@@ -41,7 +41,7 @@ async function loginHandler(request, response) {
 		return response.sendStatus(422)
 	}
 
-	const token = genToken({ email })
+	const token = genToken({ id: currentUser.id })
 	return response.json({ token })
 }
 

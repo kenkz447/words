@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 const { Schema } = mongoose
 
-export const fields = {
+export const boardFields = {
 	name: String,
 	langNative: String,
 	langTarget: String,
@@ -12,7 +12,7 @@ export const fields = {
 
 const options = { collection: 'Boards' }
 
-const boardSchema = new Schema(fields, options)
+const boardSchema = new Schema(boardFields, options)
 
 export const Board = mongoose.model('Board', boardSchema)
 
@@ -41,9 +41,18 @@ export function boardGet(props, projections) {
 	})
 }
 
-export async function boardCreate(root, props) {
-	const newBoard = new Board(props)
+export function boardCreate(root, props, context) {
+	const newBoard = new Board({ ...props, user: context.user.id })
 	return saveNewBoardToDb(newBoard)
+}
+
+export function boardUpdate(root, props, context) {
+	const boardEntity = Board.findById(props.id)
+	return new Promise((resolve, reject) => {
+		boardEntity.update(props, (errors, result) => {
+			errors ? reject(errors) : resolve(result)
+		})
+	})
 }
 
 export function boardDelete(root, props) {
