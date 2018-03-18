@@ -1,0 +1,18 @@
+{
+    "parser": "babel-eslint",
+    "extends": "standard",
+    "globals": {
+        "describe": true,
+        "it": true
+    },
+    "rules": {
+        "no-unused-expressions": "off",
+        "space-before-function-paren": "off",
+        "indent": [
+            "error",
+            "tab"
+        ],
+        "no-tabs": "off",
+        "eol-last": "off"
+    }
+}
