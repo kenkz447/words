@@ -16,19 +16,6 @@ const boardSchema = new Schema(boardFields, options)
 
 export const Board = mongoose.model('Board', boardSchema)
 
-// #region Board utilities
-function saveNewBoardToDb(newBoard) {
-	return new Promise(async (resolve, reject) => {
-		try {
-			const result = await newBoard.save()
-			resolve(result)
-		} catch (error) {
-			reject(error)
-		}
-	})
-}
-// #endregion
-
 export function boardGet(props, projections) {
 	return new Promise((resolve, reject) => {
 		const params = {}
@@ -43,14 +30,18 @@ export function boardGet(props, projections) {
 
 export function boardCreate(root, props, context) {
 	const newBoard = new Board({ ...props, user: context.user.id })
-	return saveNewBoardToDb(newBoard)
+	return new Promise((resolve, reject) => {
+		newBoard.save((error, result) => {
+			error ? reject(error) : resolve(result)
+		})
+	})
 }
 
 export function boardUpdate(root, props, context) {
-	const boardEntity = Board.findById(props.id)
+	const boardEntity = Board.findById()
 	return new Promise((resolve, reject) => {
-		boardEntity.update(props, (errors, result) => {
-			errors ? reject(errors) : resolve(result)
+		boardEntity.update({ ...props, user: context.user.id }, (error, result) => {
+			error ? reject(error) : resolve(result)
 		})
 	})
 }

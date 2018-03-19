@@ -1,17 +1,20 @@
 import { expect } from 'chai'
 import mongoose from 'mongoose'
 
-import { boardFields, boardCreate, boardGet, boardDelete } from './Board'
+import { boardFields, boardCreate, boardGet, boardDelete, boardUpdate } from './Board'
 
 import { openConnection } from 'src/mongoose/openConnection'
 import { mongoDbAddress } from '/config'
 
-const board = {
+let testCreateBoard = {
 	name: 'test_board',
 	langNative: 'vi',
 	langTarget: 'en',
-	topic: 'common',
-	user: 'user_id'
+	topic: 'common'
+}
+
+const testUser = {
+	id: 1
 }
 
 describe('Mongoose: Board', () => {
@@ -43,7 +46,7 @@ describe('Mongoose: Board', () => {
 		expect(typeof boardFields.user).equals('function')
 	})
 	it('Should create board function working correctly', (done) => {
-		boardCreate(undefined, board)
+		boardCreate(undefined, testCreateBoard, { user: testUser })
 			.then((newBoard) => {
 				if (newBoard) {
 					return done()
@@ -52,17 +55,23 @@ describe('Mongoose: Board', () => {
 			})
 			.catch((error) => done(error))
 	})
+	it('Should update board function working correctly', (done) => {
+		boardGet(testCreateBoard).then(result => {
+			boardUpdate(undefined, { ...result, name: 'update_name' }, { user: testUser })
+				.then((board) => {
+					if (board && board.name === result.name) {
+						return done()
+					}
+					throw new Error('Update failed.')
+				})
+				.catch(done)
+		})
+	})
 	it('Should get and delete board function working correctly', (done) => {
-		boardGet(board).then(result => {
-			if (result.length) {
-				const board = result[0]
-				boardDelete(undefined, board)
-					.then(done)
-			} else {
-				throw new Error('Found no board!')
-			}
-		}).catch(error => {
-			done(error)
+		boardGet(testCreateBoard).then(result => {
+			const board = result[0]
+			boardDelete(undefined, board)
+				.then(done).catch(done)
 		})
 	})
 })

@@ -8,8 +8,8 @@ import {
 import { boardCreate, boardDelete, boardGet, boardUpdate } from '/src/mongoose'
 import { getProjection } from '/src/graphql/utilities'
 
-const fields = {
-	id: {
+const boardFields = {
+	_id: {
 		type: GraphQLID,
 		description: 'The id of the board.'
 	},
@@ -26,22 +26,23 @@ const fields = {
 		type: GraphQLString
 	},
 	user: {
-		type: GraphQLString
+		type: GraphQLID
 	}
 }
 
 export const boardType = new GraphQLObjectType({
 	name: 'board',
 	description: 'Board item',
-	fields: fields
+	fields: boardFields
 })
 
 export const boardQuery = {
 	type: new GraphQLList(boardType),
-	args: fields,
-	resolve: (root, fields, source, fieldASTs) => {
+	args: boardFields,
+	resolve: (root, fields, context, fieldASTs) => {
+		const userId = context.user.id
 		const projections = getProjection(fieldASTs)
-		return boardGet(fields, projections)
+		return boardGet({...fields, user: userId}, projections)
 	}
 }
 
@@ -49,27 +50,28 @@ export const boardMuation = {
 	boardCreate: {
 		type: boardType,
 		args: {
-			name: fields.name,
-			langNative: fields.langNative,
-			langTarget: fields.langTarget,
-			topic: fields.topic
+			name: boardFields.name,
+			langNative: boardFields.langNative,
+			langTarget: boardFields.langTarget,
+			topic: boardFields.topic
 		},
 		resolve: boardCreate
 	},
 	boardUpdate: {
 		type: boardType,
 		args: {
-			name: fields.name,
-			langNative: fields.langNative,
-			langTarget: fields.langTarget,
-			topic: fields.topic
+			_id: boardFields._id,
+			name: boardFields.name,
+			langNative: boardFields.langNative,
+			langTarget: boardFields.langTarget,
+			topic: boardFields.topic
 		},
 		resolve: boardUpdate
 	},
 	boardDelete: {
 		type: boardType,
 		args: {
-			id: fields.id
+			_id: boardFields._id
 		},
 		resolve: boardDelete
 	}
