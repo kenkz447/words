@@ -54,7 +54,8 @@ describe('Mongoose connection', () => {
 ```
 
 Thực thi command `npm test` để xem thưởng thức kết quả. Khá dễ phải , tuy nhiên cũng có một số trường hợp không đơn giản như vậy.
-Bây giờ chúng ta thực hiện kiểm tra chức năng của function kết nối đến database. Lần này sẽ áp dụng phương pháp **TDD**. Với phương pháp này, chúng ta phải xóa nội dung trong function `openConnection` để đảm bảo lần test đầu tiên sẽ fail, sau đó  viết test case như sau:
+Bây giờ chúng ta thực hiện kiểm tra chức năng của function kết nối đến database. Lần này sẽ áp dụng phương pháp **TDD**(Cụ thể là việc code phải đáp ứng hai tiêu chí: Test-First (Kiểm thử trước) và Refactoring (Điều chỉnh mã nguồn)). 
+Vì vậy khi ap dụng với phương pháp này, chúng ta phải xóa nội dung trong function `openConnection` (để đảm bảo lần test đầu tiên sẽ fail). Rồi code tiếp test case như sau:
 
 ```javascript
 import import mongoose from 'mongoose'
@@ -66,17 +67,19 @@ it('Should open connection', function(done) {
     const openConnectionPromise = openConnection({ mongoDbAddress })
 
     // Nếu open connection thành công successCallback sẽ đc gọi,
-    // việc làm ở đây là đóng connection lại và truyền function `done` vào vị trí callback để thông báo bài test này đã xong
+    // việc làm ở đây là đóng connection lại và đưa function `done` vào vị trí callback để thông báo bài test này đã xong
     const successCallback = function () {
         mongoose.connection.close(done)
     }
 
     // Tiến hành open connection
-    openConnectionPromise.then(connectionOpenedCallback)
+    openConnectionPromise.then(connectionOpenedCallback).catch((error) => {
+        done(error)
+    })
 })
 ```
 
-Giờ chạy test(chắc chắn fail nhưng vẫn bắt buộc bước này). Tiếp tục implement `openConnection`:
+Giờ chạy test(chắc chắn fail nhưng vẫn bắt buộc thực hiện). Sau đó implement `openConnection`:
 
 ```javascript
 import mongoose from 'mongoose'
@@ -96,4 +99,6 @@ export function openConnection(options) {
 }
 ```
 
-Đến bước này để thì bạn phải chạy mongodb server trước sau đó mới thực hiện test.
+Kết nối đến db là bất đồng bộ, nên để biết được lúc nào quá trình hoàn tất chúng ta bắt buộc phải sử dụng các hàm callback để nhận diện. Và hiệu quả và tối ưu nhất là sử dụng Promise, `resolve` sẽ được gọi nếu kết nối thành công, `reject` dành cho trường hợp còn lại. Hai function này được định nghĩa bên trong test case. Xem lại bài test cần lưu ý về `done`, đây là function dùng trong trường hợp kiểm thử bất đồng bộ, nếu gọi `done()` thì test đã pass, còn `done(error)` đồng nghĩa test fail và `error` là lỗi dưới dạng string.
+Thời gian đợi (timeout) từ khi bắt đầu chạy testcase đến lúc `done()` là 2000ms, lâu hơn 2000ms đồng nghĩa test thất bại. Chúng ta có thể thay đổi timeout mặc định bằng cách thêm `--timeout` vào `test` script.
+Để test function này thì phải chạy mongodb server trước.

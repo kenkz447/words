@@ -2,11 +2,11 @@
 
 Làm thế nào để:
 -   **Run**: `npm start`
--   **Debug**: Trong VSCode bấm f5
+-   **Debug**(VScode user): f5
 -   **Test**: `npm test`
 
 ### TL;DR
-Đây là phần mở đầu, mục tiêu là giúp các bạn có kiến thức ban đầu về graphql và noSQL thông qua việc tạo một ứng dụng CRUD đơn giản.
+Đây là phần mở đầu, mục tiêu là giúp các bạn có kiến thức cơ bản nhất về graphql và noSQL thông qua việc tạo một ứng dụng CRUD đơn giản.
 
 Kịch bản của mình là tạo ra một website dưới dạng Single Page Application để học từ vựng tiếng anh, bao gồm các tính năng sau:
 
@@ -17,6 +17,6 @@ Vì là SPA nên ứng dụng sẽ đc chia làm 2 phần riêng biệt. Một S
 
 Cả 2 server đều chạy bằng nodejs, server backend cần cài đặt thêm mongodb. (chú ý, khi cài mongodb nên xử dụng các thông số mặc định)
 
-Quan trọng là bạn cần có kiến thứ cơ bản về javascript và nodejs trước khi theo bài viết này.
+Quan trọng là bạn cần có kiến thức cơ bản về javascript và nodejs trước khi theo project này.
 
 Xem documents cụ thể trong `/documents`.

@@ -1,11 +1,12 @@
 
 ## Khởi tạo project
 
-Tạo thư mục mới tên `words` và di chuyển đến thư mục vừa tạo. Sử dụng cli với cú pháp:
+Tạo folder mới tên `words` và di chuyển đến folder vừa tạo. Sử dụng cli với cú pháp:
 ```bash
 npm init
 ```
-Sử dụng các thông số mặc định để khởi tạo(Enter mà không nhập  gì hết). đây là file `package.json` vừa được tạo ra :
+Sau đó nhập các thông tin cơ bản về project. Hoặc đơn giản hơn, dùng `npm init -y` để sử dụng các thông số mặc định. 
+Đây là file `package.json` vừa được tạo ra :
 
 ````json
 {
@@ -52,7 +53,7 @@ và `exit 1` để thoát khỏi bash job hiện tại. 2 lệnh được nối 
 "main": "index.js"
 ````
 
-Bạn cần bạn cần tạo file khỏi chạy cho app, mặc định ở đây là `index.js`:
+Bạn cần bạn cần tạo file khỏi chạy cho app trong môi trường production, mặc định ở là `index.js`:
 
 ````javascript
 const http = require('http')
@@ -62,22 +63,23 @@ const server = http.createServer(function(request, response) {
     response.end('Hello World!')
 })
 
+// Using port 3000
 server.listen(3000)
 
 // Console will print the message
 console.log('Server running at http://127.0.0.1:3000/')
 ````
 
-Việc cuối cùng là chạy: `node index.js`. Nhập url http://127.0.0.1:3000 vào trình duyệt và xem kết quả.
+Cuối cùng là chạy: `node index.js`. Nhập url http://127.0.0.1:3000 vào trình duyệt và xem server trả về đoạn text "Hello World!".
 Đoạn code trên khá đơn giản, chắc mình sẽ không giải thích thêm.
 
 ## Cài đặt Express
 
 Ở phần trên bạn đã tạo được một server nodejs, trả về phía client **Hello World** khi nhận được request. 
 Việc viết nodejs chay như vậy sẽ khá vất vả và ít khi thấy trong các project thực tế. Vậy nên chúng ta sẽ sử dụng một framework
-để hỗ trợ cho việc viết code nhanh là tiện hơn. Mình chọn `express` theo số đông.
+để hỗ trợ cho việc code nhanh là tiện hơn. Mình chọn `express` theo số đông.
 
-````bash
+````sh
 npm install express
 ````
 
@@ -98,8 +100,6 @@ app.listen(3000, function() {
 })
 ````
 
-Chạy lại `node index.js` thì kết quả cũng không khác lần trước lắm, vậy thì tại sao phải dùng express? Các bạn cứ từ từ tìm hiểu nhé.
-
 ## Kết nối đến mongodb
 
 Tạo file `config.js` để lưu các cài đặt của app, trước tiên là địa chỉ của máy chủ mongodb:
@@ -116,7 +116,7 @@ module.exports= {
 ````
 
 Cài đặt module **mongoose**
-```
+```sh
 npm install mongoose
 ```
 và tạo file theo đường dẫn `src/mongoose/openConnection.js`
