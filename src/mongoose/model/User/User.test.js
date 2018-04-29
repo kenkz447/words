@@ -27,7 +27,7 @@ describe('Mongoose: User', () => {
 		expect(typeof fields.password).equals('function')
 	})
 	it('Should create user function working correctly', (done) => {
-		userCreate(undefined, { username: 'test_user', email: 'test_email@gmail.com', password: 'test_password' })
+		userCreate({ username: 'test_user', email: 'test_email@gmail.com', password: 'test_password' })
 			.then((newUser) => {
 				if (newUser) {
 					return done()
@@ -42,7 +42,7 @@ describe('Mongoose: User', () => {
 				if (result.length) {
 					const user = result[0]
 					if (user.username === 'test_user' && user.email === 'test_email@gmail.com') {
-						userDelete(undefined, { _id: user._id })
+						userDelete({ _id: user._id })
 						return done()
 					}
 				}

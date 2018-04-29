@@ -2,7 +2,8 @@ import {
 	GraphQLObjectType,
 	GraphQLString,
 	GraphQLList,
-	GraphQLID
+	GraphQLID,
+	GraphQLNonNull
 } from 'graphql/type'
 
 import { boardCreate, boardDelete, boardGet, boardUpdate } from '/src/mongoose'
@@ -14,19 +15,19 @@ const boardFields = {
 		description: 'The id of the board.'
 	},
 	name: {
-		type: GraphQLString
+		type: new GraphQLNonNull(GraphQLString)
 	},
 	langNative: {
-		type: GraphQLString
+		type: new GraphQLNonNull(GraphQLString)
 	},
 	langTarget: {
-		type: GraphQLString
+		type: new GraphQLNonNull(GraphQLString)
 	},
 	topic: {
-		type: GraphQLString
+		type: new GraphQLNonNull(GraphQLString)
 	},
 	user: {
-		type: GraphQLID
+		type: new GraphQLNonNull(GraphQLID)
 	}
 }
 
@@ -38,15 +39,17 @@ export const boardType = new GraphQLObjectType({
 
 export const boardQuery = {
 	type: new GraphQLList(boardType),
-	args: boardFields,
+	args: {
+		_id: boardFields._id
+	},
 	resolve: (root, fields, context, fieldASTs) => {
 		const userId = context.user.id
 		const projections = getProjection(fieldASTs)
-		return boardGet({...fields, user: userId}, projections)
+		return boardGet({ ...fields, user: userId }, projections)
 	}
 }
 
-export const boardMuation = {
+export const boardMutation = {
 	boardCreate: {
 		type: boardType,
 		args: {
@@ -55,7 +58,9 @@ export const boardMuation = {
 			langTarget: boardFields.langTarget,
 			topic: boardFields.topic
 		},
-		resolve: boardCreate
+		resolve: (root, vars, context) => {
+			return boardCreate({ ...vars, user: context.user.id })
+		}
 	},
 	boardUpdate: {
 		type: boardType,
@@ -66,7 +71,9 @@ export const boardMuation = {
 			langTarget: boardFields.langTarget,
 			topic: boardFields.topic
 		},
-		resolve: boardUpdate
+		resolve: (root, vars, context) => {
+			return boardUpdate({ ...vars, user: context.user.id })
+		}
 	},
 	boardDelete: {
 		type: boardType,

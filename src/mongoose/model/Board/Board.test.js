@@ -6,15 +6,16 @@ import { boardFields, boardCreate, boardGet, boardDelete, boardUpdate } from './
 import { openConnection } from 'src/mongoose/openConnection'
 import { mongoDbAddress } from '/config'
 
+const testUser = {
+	id: 1
+}
+
 let testCreateBoard = {
 	name: 'test_board',
 	langNative: 'vi',
 	langTarget: 'en',
-	topic: 'common'
-}
-
-const testUser = {
-	id: 1
+	topic: 'common',
+	user: testUser.id
 }
 
 describe('Mongoose: Board', () => {
@@ -46,7 +47,7 @@ describe('Mongoose: Board', () => {
 		expect(typeof boardFields.user).equals('function')
 	})
 	it('Should create board function working correctly', (done) => {
-		boardCreate(undefined, testCreateBoard, { user: testUser })
+		boardCreate(testCreateBoard)
 			.then((newBoard) => {
 				if (newBoard) {
 					return done()
@@ -57,9 +58,10 @@ describe('Mongoose: Board', () => {
 	})
 	it('Should update board function working correctly', (done) => {
 		boardGet(testCreateBoard).then(result => {
-			boardUpdate(undefined, { ...result, name: 'update_name' }, { user: testUser })
-				.then((board) => {
-					if (board && board.name === result.name) {
+			const board = result[0]
+			boardUpdate(Object.assign(board, { name: 'update_name' }))
+				.then((updatedBoard) => {
+					if (updatedBoard.name === 'update_name') {
 						return done()
 					}
 					throw new Error('Update failed.')
@@ -68,9 +70,10 @@ describe('Mongoose: Board', () => {
 		})
 	})
 	it('Should get and delete board function working correctly', (done) => {
-		boardGet(testCreateBoard).then(result => {
+		const boardToGet = { name: 'update_name' }
+		boardGet(boardToGet).then(result => {
 			const board = result[0]
-			boardDelete(undefined, board)
+			boardDelete({ id: board._id })
 				.then(done).catch(done)
 		})
 	})

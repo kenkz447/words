@@ -49,12 +49,12 @@ export function userGet(props, projections) {
 	})
 }
 
-export async function userCreate(root, props) {
+export async function userCreate(props) {
 	const newUser = await createUser(props)
 	return saveNewUserToDb(newUser)
 }
 
-export function userDelete(root, props) {
+export function userDelete(props) {
 	return new Promise(async (resolve, reject) => {
 		const callBack = (errors, result) => {
 			errors ? reject(errors) : resolve()

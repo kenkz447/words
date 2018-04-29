@@ -1,8 +1,8 @@
 {
 	"info": {
-		"name": "Graphql and mongodb setup",
 		"_postman_id": "c0810df6-f6fc-bc0c-76ba-02f530ffa908",
-		"description": "# Introduction\nWhat does your API do?\n\n# Overview\nThings that the developers should know about\n\n# Authentication\nWhat is the preferred way of using the API?\n\n# Error Codes\nWhat errors and status codes can a user expect?\n\n# Rate limit\nIs there a limit to the number of requests an user can send?",
+		"name": "Graphql and mongodb setup",
+		"description": "# Introduction\nWords API Document\n\n# Overview\nGraphql\n\n# Authentication\nCall \"Accounts/Get JWT\" to get jwt, and then set it to global var with key \"token\"\n\n# Error Codes\n400, 404, 422\n\n# Rate limit\nIs there a limit to the number of requests an user can send?",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -14,25 +14,28 @@
 					"name": "Get all user",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:3000/graphql?query={users{_id, username, password}}",
+							"raw": "{{host}}/graphql?query={users{_id, username, email}}",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
-							"port": "3000",
 							"path": [
 								"graphql"
 							],
 							"query": [
 								{
 									"key": "query",
-									"value": "{users{_id, username, password}}",
-									"equals": true
+									"value": "{users{_id, username, email}}"
 								}
 							]
 						},
@@ -40,7 +43,7 @@
 					},
 					"response": [
 						{
-							"id": "e6ce07f5-236a-494b-875a-2588e50960a8",
+							"id": "59d13cef-2535-4110-8cad-d528371fb34e",
 							"name": "Default",
 							"originalRequest": {
 								"method": "GET",
@@ -69,26 +72,28 @@
 					"name": "Get user by _id",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
 						"body": {},
 						"url": {
-							"raw": "localhost:3000/graphql?query={users(_id: \"5a8705f8fb58783e38590902\"){_id, username, password}}",
+							"raw": "{{host}}/graphql?query={users(_id: \"5aabf66cd326f890f495be06\"){_id, username, email}}",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
-							"port": "3000",
 							"path": [
 								"graphql"
 							],
 							"query": [
 								{
 									"key": "query",
-									"value": "{users(_id: \"5a8705f8fb58783e38590902\"){_id, username, password}}",
-									"equals": true
+									"value": "{users(_id: \"5aabf66cd326f890f495be06\"){_id, username, email}}"
 								}
 							]
-						},
-						"description": null
+						}
 					},
 					"response": []
 				},
@@ -96,26 +101,28 @@
 					"name": "Get user by username",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
 						"body": {},
 						"url": {
-							"raw": "localhost:3000/graphql?query={users(username: \"root\"){_id, username, password}}",
+							"raw": "{{host}}/graphql?query={users(username: \"new_user2\"){_id, username, email}}",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
-							"port": "3000",
 							"path": [
 								"graphql"
 							],
 							"query": [
 								{
 									"key": "query",
-									"value": "{users(username: \"root\"){_id, username, password}}",
-									"equals": true
+									"value": "{users(username: \"new_user2\"){_id, username, email}}"
 								}
 							]
-						},
-						"description": null
+						}
 					},
 					"response": []
 				},
@@ -127,51 +134,55 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"query\": \"mutation UserAdd($username: String!, $email: String!, $password: String!){ userAdd(username: $username, email: $email, password: $password) { _id, username, email, password } }\",\n  \"variables\": {\n    \"username\": \"admin\",\n    \"email\": \"admin@gmail.com\",\n    \"password\": \"admin123\"\n  }\n}"
+							"raw": "{\n  \"query\": \"mutation UserCreate($username: String!, $email: String!, $password: String!){ userCreate(username: $username, email: $email, password: $password) { _id, username, email, password } }\",\n  \"variables\": {\n    \"username\": \"admin\",\n    \"email\": \"admin@gmail.com\",\n    \"password\": \"admin123\"\n  }\n}"
 						},
 						"url": {
-							"raw": "localhost:3000/graphql?",
+							"raw": "{{host}}/graphql?",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
-							"port": "3000",
 							"path": [
 								"graphql"
 							]
-						},
-						"description": null
+						}
 					},
 					"response": []
 				},
 				{
-					"name": "Remove user by _id",
+					"name": "Delete user by _id",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
 								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"query\": \"mutation UserDelete($_id: ID!){ userDelete(_id: $_id) { _id } }\",\n  \"variables\": {\n    \"_id\": \"5a87aadb35f4a64d98478ccb\"\n  }\n}"
+							"raw": "{\n  \"query\": \"mutation UserDelete($_id: ID!){ userDelete(_id: $_id) { _id } }\",\n  \"variables\": {\n    \"_id\": \"5aae074d0974c1ab65f8e944\"\n  }\n}"
 						},
 						"url": {
-							"raw": "localhost:3000/graphql?",
+							"raw": "{{host}}/graphql?",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
-							"port": "3000",
 							"path": [
 								"graphql"
 							]
-						},
-						"description": null
+						}
 					},
 					"response": []
 				}
@@ -193,19 +204,17 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": \"kenkz447@gmail.com\",\n\t\"password\": \"7a7p5zvbbz\"\n}"
+							"raw": "{\n\t\"email\": \"new_user@gmail.com\",\n\t\"password\": \"new_user123\"\n}"
 						},
 						"url": {
-							"raw": "localhost:3000/getjwt",
+							"raw": "{{host}}/getjwt",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
-							"port": "3000",
 							"path": [
 								"getjwt"
 							]
-						},
-						"description": ""
+						}
 					},
 					"response": []
 				},
@@ -221,19 +230,372 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\": \"new_user\",\n\t\"email\": \"new_user@gmail.com\",\n\t\"password\": \"new_user123\"\n}"
+							"raw": "{\n\t\"username\": \"new_user2\",\n\t\"email\": \"new_user2@gmail.com\",\n\t\"password\": \"new_user123\"\n}"
 						},
 						"url": {
-							"raw": "localhost:3000/register",
+							"raw": "{{host}}/register",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
-							"port": "3000",
 							"path": [
 								"register"
 							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Boards",
+			"description": "",
+			"item": [
+				{
+					"name": "Get all board of user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{host}}/graphql?query={boards{_id, name, langNative, langTarget, topic, user}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"graphql"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{boards{_id, name, langNative, langTarget, topic, user}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get board by _id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{host}}/graphql?query={boards(_id: \"5ab2862cd472a9461cfb95c9\"){_id, name, langNative, langTarget, topic, user}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"graphql"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{boards(_id: \"5ab2862cd472a9461cfb95c9\"){_id, name, langNative, langTarget, topic, user}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a board",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"mutation BoardCreate($name: String!, $langNative: String!, $langTarget: String!, $topic: String!){ boardCreate(name: $name, langNative: $langNative, langTarget: $langTarget, topic: $topic) { _id, name, langNative, langTarget, topic, user } }\",\n  \"variables\": {\n    \"name\": \"A Board\",\n    \"langNative\": \"vi\",\n    \"langTarget\": \"en\",\n    \"topic\": \"common\"\n  }\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{host}}/graphql?",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "21b5b3c5-2053-4b60-9e68-cdb32271ea89",
+							"name": "Create a board",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": false
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"disabled": false
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"query\": \"mutation BoardCreate($name: String!, $langNative: String!, $langTarget: String!, $topic: String!){ boardCreate(name: $name, langNative: $langNative, langTarget: $langTarget, topic: $topic) { id, name, langNative, langTarget, topic, user } }\",\n  \"variables\": {\n    \"name\": \"A Board\",\n    \"langNative\": \"vi\",\n    \"langTarget\": \"en\",\n    \"topic\": \"common\"\n  }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/graphql?",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Connection",
+									"value": "keep-alive",
+									"name": "Connection",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"key": "Content-Length",
+									"value": "162",
+									"name": "Content-Length",
+									"description": "The length of the response body in octets (8-bit bytes)"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 Mar 2018 13:41:16 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"a2-twE1UiKX/6FTwUjTTSPYGJU7IG0\"",
+									"name": "ETag",
+									"description": "An identifier for a specific version of a resource, often a message digest"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express",
+									"name": "X-Powered-By",
+									"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+								}
+							],
+							"cookie": [],
+							"body": "{\"data\":{\"boardCreate\":{\"id\":\"5aae6c7c1d067f080a9a1c9a\",\"name\":\"A Board\",\"langNative\":\"vi\",\"langTarget\":\"en\",\"topic\":\"common\",\"user\":\"5aabf66cd326f890f495be06\"}}}"
+						}
+					]
+				},
+				{
+					"name": "Delete a board by _id",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"mutation BoardDelete($_id: ID!){ boardDelete(_id: $_id) { _id } }\",\n  \"variables\": {\n    \"_id\": \"5aafd3928ad3e33acaccac0a\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/graphql?",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update board",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"mutation BoardUpdate($_id: ID!, $name: String!, $langNative: String!, $langTarget: String!, $topic: String!){ boardUpdate(_id: $_id, name: $name, langNative: $langNative, langTarget: $langTarget, topic: $topic) { _id, name, langNative, langTarget, topic, user } }\",\n  \"variables\": {\n  \t\"_id\": \"5aae6c7c1d067f080a9a1c9a\",\n    \"name\": \"A Board\",\n    \"langNative\": \"vi\",\n    \"langTarget\": \"en\",\n    \"topic\": \"common\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/graphql?",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Words",
+			"description": "",
+			"item": [
+				{
+					"name": "Get word by Board _id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{host}}/graphql?query={words(board: \"5aafd3928ad3e33acaccac0a\"){_id, source, translated, board, user }}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"graphql"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{words(board: \"5aafd3928ad3e33acaccac0a\"){_id, source, translated, board, user }}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new word",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"mutation WordCreate($source: String!, $translated: String!, $board: ID!){ wordCreate(source: $source, translated: $translated, board: $board) { _id, source, translated, board, user } }\",\n  \"variables\": {\n    \"source\": \"land\",\n    \"translated\": \"mảnh đất\",\n    \"board\": \"5aafd3928ad3e33acaccac0a\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/graphql?",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update word",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"mutation WordUpdate($_id: ID!, $source: String!, $translated: String, $board: ID!){ wordUpdate(_id: $_id, source: $source, translated: $translated, board: $board) { _id, source, translated, board, user } }\",\n  \"variables\": {\n  \t\"_id\": \"5ab26ea0bbbca84cf01652ed\",\n    \"source\": \"moutain\",\n    \"translated\": \"núi\",\n    \"board\": \"5aafd3928ad3e33acaccac0a\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/graphql?",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detete word",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"mutation WordDelete($_id: ID!){ wordDelete(_id: $_id) { _id } }\",\n  \"variables\": {\n    \"_id\": \"5ab2761905fc095888f5bd98\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/graphql?",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
 					},
 					"response": []
 				}

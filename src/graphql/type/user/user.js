@@ -51,13 +51,17 @@ export const userMuation = {
 			email: fields.email,
 			password: fields.password
 		},
-		resolve: userCreate
+		resolve: (root, vars, context) => {
+			return userCreate(vars)
+		}
 	},
 	userDelete: {
 		type: userType,
 		args: {
 			_id: fields._id
 		},
-		resolve: userDelete
+		resolve: (root, vars, context) => {
+			return userDelete(vars)
+		}
 	}
 }

@@ -125,9 +125,9 @@ và tạo file theo đường dẫn `src/mongoose/openConnection.js`
 import mongoose from 'mongoose'
 
 export function openConnection(options) {
-    const { connectionAddress } = options
+    const { mongoDbAddress } = options
 
-    mongoose.connect(connectionAddress)
+    mongoose.connect(mongoDbAddress)
     const db = mongoose.connection
 
     db.on('error', () => {
@@ -210,7 +210,7 @@ import module from '../../../../foo'
 import module from 'src/foo'
 ```
 
-Để làm việc này, trước tiên cài đặt package `module-resolver`:
+Để làm việc này, trước tiên cài đặt package `babel-plugin-module-resolver`:
 
 ```bash
 npm install module-resolver --save-dev

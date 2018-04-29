@@ -5,14 +5,16 @@ import {
 
 import {
 	userQuery, userMuation,
-	boardQuery, boardMuation
+	boardQuery, boardMutation,
+	wordQuery, wordMutation
 } from './type'
 
 const rootQuery = new GraphQLObjectType({
 	name: 'query',
 	fields: {
 		users: userQuery,
-		boards: boardQuery
+		boards: boardQuery,
+		words: wordQuery
 	}
 })
 
@@ -20,7 +22,8 @@ export const rootMutation = new GraphQLObjectType({
 	name: 'mutation',
 	fields: () => ({
 		...userMuation,
-		...boardMuation
+		...boardMutation,
+		...wordMutation
 	})
 })
 

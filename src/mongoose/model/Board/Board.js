@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import { Word } from '../Word'
+
 const { Schema } = mongoose
 
 export const boardFields = {
@@ -28,8 +30,8 @@ export function boardGet(props, projections) {
 	})
 }
 
-export function boardCreate(root, props, context) {
-	const newBoard = new Board({ ...props, user: context.user.id })
+export function boardCreate(props) {
+	const newBoard = new Board(props)
 	return new Promise((resolve, reject) => {
 		newBoard.save((error, result) => {
 			error ? reject(error) : resolve(result)
@@ -37,19 +39,23 @@ export function boardCreate(root, props, context) {
 	})
 }
 
-export function boardUpdate(root, props, context) {
-	const boardEntity = Board.findById()
+export function boardUpdate(props) {
+	const boardEntity = Board.findById(props._id)
 	return new Promise((resolve, reject) => {
-		boardEntity.update({ ...props, user: context.user.id }, (error, result) => {
-			error ? reject(error) : resolve(result)
+		boardEntity.update(props, (error) => {
+			error ? reject(error) : resolve(props)
 		})
 	})
 }
 
-export function boardDelete(root, props) {
+export function boardDelete(props) {
 	return new Promise(async (resolve, reject) => {
 		const callBack = (errors, result) => {
-			errors ? reject(errors) : resolve()
+			if (errors) {
+				return reject(errors)
+			}
+			Word.find({ board: props._id })
+				.remove(() => resolve())
 		}
 		if (props._id !== null) {
 			Board.findByIdAndRemove(props._id, callBack)
