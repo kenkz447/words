@@ -172,10 +172,10 @@ export function openConnection(options) {
 Nên một số bộ biên dịch javascript-to-javascript như `babel` ra đời. Bây giờ thì chúng ta bắt buộc phải cài đặt `babel`
 
 ```
-npm install babel babel-cli --save-dev
+npm install babel babel-cli babel-preset-env --save-dev
 ```
 
-`--save-dev` là một command argument để lưu `babel babel-cli` vào devDependencies trong `package.json`. `devDependencies` là các module phục vụ cho việc code, biên dịch hay công việc linh tinh khác chứ không phải dùng trong quá trình sử dụng app.
+`--save-dev` là một command argument để lưu `babel babel-cli babel-preset-env` vào devDependencies trong `package.json`. `devDependencies` là các module phục vụ cho việc code, biên dịch hay công việc linh tinh khác chứ không phải dùng trong quá trình sử dụng app.
 
 Sau khi các gói được cài đặt xong, chúng ta sẽ thêm một command để chạy app bằng babel, chỉnh sửa `package.json`:
 
@@ -220,6 +220,7 @@ Và tạo file config `.babelrc` đặt ở root của project:
 
 ```json
 {
+    "presets": ["env"],
     "plugins": [
         ["module-resolver", {
             "root": ["./"]
