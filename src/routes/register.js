@@ -43,8 +43,11 @@ async function registerHandler(request, response) {
 	const { username, email, password } = request.body
 
 	try {
-		const newUser = await userCreate({ username, email, password })
-		return response.status(201).json(newUser)
+		await userCreate({ username, email, password })
+		return response.status(201).json({
+			username,
+			email
+		})
 	} catch (error) {
 		return response.status(201).text(error)
 	}
