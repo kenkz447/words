@@ -9,7 +9,7 @@ export const fields = {
 	password: String
 }
 
-const options = { collection: 'Users' }
+const options = { collection: 'users' }
 
 const userSchema = new Schema(fields, options)
 

@@ -4,32 +4,32 @@ import { registerPath } from '/config'
 import { userGet, userCreate } from '/src/mongoose'
 
 const bodyCheckers = [
-	check('username', 'Username must be at least 6 chars.')
-		.trim().isLength({ min: 6 })
+	check('username', 'Nhập tên hiển thị tối thiểu 3 ký tự')
+		.trim().isLength({ min: 3 })
 		.custom(async (username) => {
 			try {
 				const users = await userGet({ username })
 				if (users.length) {
-					throw new Error('usename is already in use.')
+					throw 'Tên này đã được sử dụng'
 				}
 			} catch (error) {
-				throw new Error(error)
+				throw error
 			}
 		}),
-	check('email', 'Must be an email')
+	check('email', 'Vui lòng nhập email')
 		.trim().isEmail()
 		.custom(async (email) => {
 			try {
 				const users = await userGet({ email })
 				if (users.length) {
-					throw new Error('This email is already in use.')
+					throw 'Email này đã được sử dụng'
 				}
 			} catch (error) {
-				throw new Error(error)
+				throw error
 			}
 		}),
-	check('password', 'Passwords must be at least 6 chars long.')
-		.isLength({ min: 6 })
+	check('password', 'Mật khẩu tối thiểu 3 ký tự')
+		.isLength({ min: 3 })
 ]
 
 async function registerHandler(request, response) {
