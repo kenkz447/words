@@ -1,10 +1,10 @@
 import { expect } from 'chai'
 import mongoose from 'mongoose'
 
-import { fields, userCreate, userGet, userDelete } from './User'
+import { userModelFields, userCreate, userGet, userDelete } from './User'
 
 import { openConnection } from 'src/mongoose/openConnection'
-import { mongoDbAddress } from '/config'
+import { mongoDbAddress } from '@/config'
 
 describe('Mongoose: User', () => {
 	before(async function () {
@@ -15,16 +15,16 @@ describe('Mongoose: User', () => {
 	})
 
 	it('Should have an "username" field of type [function: String]', () => {
-		expect(fields).to.have.property('username')
-		expect(typeof fields.username).equals('function')
+		expect(userModelFields).to.have.property('username')
+		expect(typeof userModelFields.username).equals('function')
 	})
 	it('Should have an "email" field of type [function: String]', () => {
-		expect(fields).to.have.property('email')
-		expect(typeof fields.username).equals('function')
+		expect(userModelFields).to.have.property('email')
+		expect(typeof userModelFields.username).equals('function')
 	})
 	it('Should have an "password" field of type [function: String]', () => {
-		expect(fields).to.have.property('password')
-		expect(typeof fields.password).equals('function')
+		expect(userModelFields).to.have.property('password')
+		expect(typeof userModelFields.password).equals('function')
 	})
 	it('Should create user function working correctly', (done) => {
 		userCreate({ username: 'test_user', email: 'test_email@gmail.com', password: 'test_password' })

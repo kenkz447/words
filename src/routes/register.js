@@ -1,7 +1,7 @@
 import { check, validationResult } from 'express-validator/check'
 
-import { registerPath } from '/config'
-import { userGet, userCreate } from '/src/mongoose'
+import { registerPath } from '@/config'
+import { userGet, userCreate } from '@/mongoose'
 
 const bodyCheckers = [
 	check('username', 'Nhập tên hiển thị tối thiểu 3 ký tự')
@@ -10,7 +10,7 @@ const bodyCheckers = [
 			try {
 				const users = await userGet({ username })
 				if (users.length) {
-					throw 'Tên này đã được sử dụng'
+					throw new Error('Tên này đã được sử dụng')
 				}
 			} catch (error) {
 				throw error
@@ -22,7 +22,7 @@ const bodyCheckers = [
 			try {
 				const users = await userGet({ email })
 				if (users.length) {
-					throw 'Email này đã được sử dụng'
+					throw new Error('Email này đã được sử dụng')
 				}
 			} catch (error) {
 				throw error

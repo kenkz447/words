@@ -2,9 +2,9 @@ import jsonwebtoken from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { check, validationResult } from 'express-validator/check'
 
-import { appSecret, getJWTPath } from '/config'
+import { appSecret, getJWTPath } from '@/config'
 
-import { userGet } from '/src/mongoose'
+import { userGet } from '@/mongoose'
 
 const bodyCheckers = [
 	check('email', 'Email not exist.').exists(),

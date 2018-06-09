@@ -1,6 +1,12 @@
 {
     "parser": "babel-eslint",
-    "extends": "standard",
+    "extends": [
+        "plugin:flowtype/recommended",
+        "standard"
+    ],
+    "plugins": [
+        "flowtype"
+    ],
     "globals": {
         "describe": true,
         "it": true,
@@ -8,6 +14,7 @@
         "after": true
     },
     "rules": {
+        "flowtype/no-types-missing-file-annotation": 0,
         "no-unused-expressions": "off",
         "space-before-function-paren": "off",
         "indent": [

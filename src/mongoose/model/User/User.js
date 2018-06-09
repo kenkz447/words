@@ -1,25 +1,35 @@
 import mongoose from 'mongoose'
-import { hashPassword } from '/src/utilities'
+import { hashPassword } from '@/utilities'
 
-const { Schema } = mongoose
+import { GraphQLPageArgs } from '@/graphql'
+import { applyPagination } from '../../utilities'
 
-export const fields = {
+export interface User {
+	_id: string,
+	username: string,
+	email: string,
+	password: string
+}
+
+export const userModelFields = {
 	username: String,
 	email: String,
 	password: String
 }
 
-const options = { collection: 'users' }
+const { Schema } = mongoose
 
-const userSchema = new Schema(fields, options)
+const userSchema = new Schema(userModelFields, {
+	collection: 'users'
+})
 
-export const User = mongoose.model('User', userSchema)
+export const UserModel = mongoose.model('User', userSchema)
 
 // #region User utilities
 async function createUser(props) {
 	const { username, email, password } = props
 	const hashedPassword = await hashPassword(password)
-	return new User({
+	return new UserModel({
 		username,
 		email,
 		password: hashedPassword
@@ -38,15 +48,19 @@ function saveNewUserToDb(newUser) {
 }
 // #endregion
 
-export function userGet(props, projections) {
-	return new Promise((resolve, reject) => {
+export async function userGet(args: GraphQLPageArgs, projections) {
+	try {
 		const params = {}
-		for (const fieldKey in props) { params[fieldKey] = props[fieldKey] }
+		const { first, after } = args
 
-		User.find(params, projections, (error, users) => {
-			error ? reject(error) : resolve(users)
-		})
-	})
+		for (const fieldKey in args) {
+			params[fieldKey] = args[fieldKey]
+		}
+		const page = await applyPagination({ Model: UserModel, after, first })
+		return page
+	} catch (error) {
+		throw new Error(error)
+	}
 }
 
 export async function userCreate(props) {
@@ -60,9 +74,9 @@ export function userDelete(props) {
 			errors ? reject(errors) : resolve()
 		}
 		if (props._id !== null) {
-			User.findByIdAndRemove(props._id, callBack)
+			UserModel.findByIdAndRemove(props._id, callBack)
 		} else {
-			User.findOneAndRemove(props, callBack)
+			UserModel.findOneAndRemove(props, callBack)
 		}
 	})
 }

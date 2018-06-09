@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import { wordFields, wordCreate, wordGet, wordDelete, wordUpdate } from './Word'
 
 import { openConnection } from 'src/mongoose/openConnection'
-import { mongoDbAddress } from '/config'
+import { mongoDbAddress } from '@/config'
 
 const testUser = {
 	id: 1

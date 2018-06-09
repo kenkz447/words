@@ -192,8 +192,8 @@ Từ đây trở về sau, ta dùng command `npm start` thay thế cho `node app
 Trở lại file `index.js`, chúng ta import các phần đã viết ở trước
 
 ```javascript
-import { openConnection } from '/src/mongoose'
-import { mongoDbAddress } from '/config'
+import { openConnection } from '@/mongoose'
+import { mongoDbAddress } from '@/config'
 
 openConnection({ mongoDbAddress })
 ```

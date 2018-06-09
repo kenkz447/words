@@ -6,8 +6,8 @@ import {
 	GraphQLNonNull
 } from 'graphql/type'
 
-import { boardCreate, boardDelete, boardGet, boardUpdate } from '/src/mongoose'
-import { getProjection } from '/src/graphql/utilities'
+import { boardCreate, boardDelete, boardGet, boardUpdate } from '@/mongoose'
+import { getProjection } from '@/graphql/utilities'
 
 const boardFields = {
 	_id: {

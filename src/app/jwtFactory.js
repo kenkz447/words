@@ -1,5 +1,5 @@
 import jwt from 'express-jwt'
-import { appSecret } from '/config'
+import { appSecret } from '@/config'
 
 export class JwtFactory {
 	static create() {

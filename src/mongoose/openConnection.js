@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 
+mongoose.set('debug', true)
+
 export function openConnection (options) {
 	const { mongoDbAddress } = options
 

@@ -1,15 +1,15 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 
-import { openConnection } from '/src/mongoose'
-import { JwtFactory } from '/src/app'
+import { openConnection } from '@/mongoose'
+import { JwtFactory } from '@/app'
 import {
 	registerGetJWTRoute,
 	registerGraphQLRoute,
 	registerRegisterRoute
-} from '/src/routes'
+} from '@/routes'
 
-import { mongoDbAddress, getJWTPath, registerPath } from '/config'
+import { mongoDbAddress, getJWTPath, registerPath } from '@/config'
 
 async function doConnect() {
 	try {

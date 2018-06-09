@@ -6,8 +6,8 @@ import {
 	GraphQLNonNull
 } from 'graphql/type'
 
-import { wordCreate, wordDelete, wordGet, wordUpdate } from '/src/mongoose'
-import { getProjection } from '/src/graphql/utilities'
+import { wordCreate, wordDelete, wordGet, wordUpdate } from '@/mongoose'
+import { getProjection } from '@/graphql/utilities'
 
 const wordFields = {
 	_id: {

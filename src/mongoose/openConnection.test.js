@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import mongoose from 'mongoose'
 
-import { mongoDbAddress } from '/config'
+import { mongoDbAddress } from '@/config'
 import { openConnection } from './openConnection'
 
 describe('Mongoose connection', () => {

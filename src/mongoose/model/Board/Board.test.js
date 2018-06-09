@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import { boardFields, boardCreate, boardGet, boardDelete, boardUpdate } from './Board'
 
 import { openConnection } from 'src/mongoose/openConnection'
-import { mongoDbAddress } from '/config'
+import { mongoDbAddress } from '@/config'
 
 const testUser = {
 	id: 1

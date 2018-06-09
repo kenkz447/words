@@ -1,45 +1,35 @@
+
 import {
 	GraphQLObjectType,
 	GraphQLString,
-	GraphQLList,
 	GraphQLID
 } from 'graphql/type'
 
-import { userCreate, userDelete, userGet } from '/src/mongoose'
-import { getProjection } from '/src/graphql/utilities'
+import { userCreate, userDelete, userGet } from '@/mongoose'
 
-const fields = {
-	_id: {
-		type: GraphQLID,
-		description: 'The id of the user.'
-	},
-	username: {
-		type: GraphQLString,
-		description: 'The name of the user.'
-	},
-	email: {
-		type: GraphQLString,
-		description: 'The email of the user.'
-	},
-	password: {
-		type: GraphQLString,
-		description: 'The password of the user.'
-	}
-}
+import {
+	graphQLPage,
+	graphQLPageArgs,
+	GraphQLPageArgs
+} from '../pagination'
+
+import { fieldCreate } from '../../utilities'
 
 export const userType = new GraphQLObjectType({
 	name: 'user',
 	description: 'User item',
-	fields: fields
+	fields: {
+		_id: fieldCreate(GraphQLID),
+		username: fieldCreate(GraphQLString),
+		email: fieldCreate(GraphQLString)
+	}
 })
 
 export const userQuery = {
-	type: new GraphQLList(userType),
-	args: fields,
-	resolve: (root, fields, source, fieldASTs) => {
-		const excludes = ['password']
-		const projections = getProjection(fieldASTs, excludes)
-		return userGet(fields, projections)
+	type: graphQLPage(userType),
+	args: graphQLPageArgs,
+	resolve: (root, args: GraphQLPageArgs, context, fieldASTs) => {
+		return userGet(args)
 	}
 }
 
@@ -47,9 +37,9 @@ export const userMuation = {
 	userCreate: {
 		type: userType,
 		args: {
-			username: fields.username,
-			email: fields.email,
-			password: fields.password
+			username: fieldCreate(GraphQLString, true),
+			email: fieldCreate(GraphQLString, true),
+			password: fieldCreate(GraphQLString, true)
 		},
 		resolve: (root, vars, context) => {
 			return userCreate(vars)
@@ -58,7 +48,7 @@ export const userMuation = {
 	userDelete: {
 		type: userType,
 		args: {
-			_id: fields._id
+			_id: fieldCreate(GraphQLID, true)
 		},
 		resolve: (root, vars, context) => {
 			return userDelete(vars)

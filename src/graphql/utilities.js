@@ -1,3 +1,11 @@
+import { GraphQLNonNull } from 'graphql/type'
+
+export function fieldCreate(type: any, notNULL: boolean) {
+	return {
+		type: notNULL ? new GraphQLNonNull(type) : type
+	}
+}
+
 /**
  * Generate projection object for mongoose
  * @param  {Object} fieldASTs

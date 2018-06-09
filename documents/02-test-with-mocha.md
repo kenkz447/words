@@ -40,7 +40,7 @@ Tạo file `src/mongoose/openConnection.test.js`
 ```javascript
 import { expect } from 'chai'
 
-import { mongoDbAddress } from '/config'
+import { mongoDbAddress } from '@/config'
 import { openConnection } from './openConnection'
 
 describe('Mongoose connection', () => {
