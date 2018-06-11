@@ -55,7 +55,7 @@ export const GraphQLPageInfo = new GraphQLObjectType({
 	fields: () => ({
 		startCursor: { type: GraphQLString },
 		endCursor: { type: GraphQLString },
-		hasPrevousPage: { type: GraphQLBoolean }
+		hasPrevousPage: { type: GraphQLBoolean },
 		hasNextPage: { type: GraphQLBoolean }
 	})
 })
