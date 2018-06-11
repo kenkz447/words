@@ -59,13 +59,15 @@ interface ApplyPaginationProps {
 export async function applyPagination<T>(props: ApplyPaginationProps) {
 	try {
 		const { Model, after, first } = props
-		let queryCursor
+		let query
 		if (after) {
-			queryCursor = Model.findById(after).cursor()
+			query = Model.find({ _id: { $lt: after } })
 		} else {
-			const query = Model.where()
-			queryCursor = query.cursor()
+			query = Model.where()
 		}
+
+		query = query.sort({ _id: -1 }).limit(first)
+		const queryCursor = query.cursor()
 
 		const edges = await getEdges(queryCursor, after, first)
 		const pageInfo = await getPageInfo(queryCursor, edges, first)
