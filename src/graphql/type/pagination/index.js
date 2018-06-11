@@ -3,6 +3,7 @@ import {
 	GraphQLString,
 	GraphQLBoolean,
 	GraphQLInt,
+	GraphQLID,
 	GraphQLList
 } from 'graphql'
 
@@ -32,7 +33,7 @@ export const graphQLPageArgs = {
 		description: 'Limits the number of results returned in the page. Defaults to 20.'
 	},
 	after: {
-		type: GraphQLString,
+		type: GraphQLID,
 		description: 'The cursor value of an item returned in previous page. An alternative to in integer offset.'
 	}
 }
@@ -54,6 +55,7 @@ export const GraphQLPageInfo = new GraphQLObjectType({
 	fields: () => ({
 		startCursor: { type: GraphQLString },
 		endCursor: { type: GraphQLString },
+		hasPrevousPage: { type: GraphQLBoolean }
 		hasNextPage: { type: GraphQLBoolean }
 	})
 })
