@@ -1,0 +1,32 @@
+type PageInfo {
+    startCursor: ID
+    endCursor: ID
+    hasPreviousPage: Boolean
+    hasNextPage: Boolean
+}
+
+type User {
+    _id: ID
+    email: String!
+    username: String!
+}
+
+type UserEdge {
+    node: User!,
+    cursor: ID!
+}
+
+type UserPagination {
+    totalCount: Int
+    edges: [UserEdge]
+    pageInfo: PageInfo
+}
+
+type UserCollection {
+    paginate(first: Int, after: ID): UserPagination
+    getUserByEmail(email: String!): User
+}
+
+type Query {
+    users: UserCollection
+}
