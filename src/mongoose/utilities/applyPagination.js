@@ -1,7 +1,7 @@
 import { QueryCursor, Model } from 'mongoose'
-import { GraphQlPagination, Edge, convertNodeToCursor } from '@/graphql'
+import { GraphQlPagination, Edge, convertNodeToCursor, GraphQLPageArgs } from '@/graphql'
 
-export async function getEdges(queryCursor: QueryCursor, after: string, first: number) {
+export async function getEdges(queryCursor: QueryCursor, graphQLPageArgs: GraphQLPageArgs) {
 	try {
 		const edges: Array<Edge> = []
 
@@ -14,7 +14,7 @@ export async function getEdges(queryCursor: QueryCursor, after: string, first: n
 				cursor: convertNodeToCursor(nextNode)
 			})
 			count++
-			const canGetMore = Boolean(count < first)
+			const canGetMore = Boolean(count < graphQLPageArgs.first)
 			if (canGetMore) {
 				nextNode = await queryCursor.next()
 			} else {
@@ -50,30 +50,24 @@ export async function getPageInfo(queryCursor: QueryCursor, edges: Edge[], first
 	}
 }
 
-interface ApplyPaginationProps {
-	Model: Model,
-	first: number,
-	after: string
-}
-
-export async function applyPagination<T>(props: ApplyPaginationProps) {
+export async function applyPagination<T>(model: Model, graphQLPageArgs: GraphQLPageArgs) {
 	try {
-		const { Model, after, first } = props
+		const { after, first } = graphQLPageArgs
 		let query
 		if (after) {
-			query = Model.find({ _id: { $lt: after } })
+			query = model.find({ _id: { $lt: after } })
 		} else {
-			query = Model.where()
+			query = model.where()
 		}
 
 		query = query.sort({ _id: -1 }).limit(first)
 		const queryCursor = query.cursor()
 
-		const edges = await getEdges(queryCursor, after, first)
+		const edges = await getEdges(queryCursor, graphQLPageArgs)
 		const pageInfo = await getPageInfo(queryCursor, edges, first)
 
 		const pagination: GraphQlPagination<T> = {
-			totalCount: Model.count(),
+			totalCount: model.count(),
 			edges: edges,
 			pageInfo: pageInfo
 		}

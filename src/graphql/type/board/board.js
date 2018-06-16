@@ -1,84 +1,87 @@
 import {
 	GraphQLObjectType,
 	GraphQLString,
-	GraphQLList,
-	GraphQLID,
-	GraphQLNonNull
+	GraphQLID
 } from 'graphql/type'
 
-import { boardCreate, boardDelete, boardGet, boardUpdate } from '@/mongoose'
-import { getProjection } from '@/graphql/utilities'
+import {
+	graphQLPage,
+	graphQLPageArgs,
+	GraphQLPageArgs
+} from '../pagination'
 
-const boardFields = {
-	_id: {
-		type: GraphQLID,
-		description: 'The id of the board.'
-	},
-	name: {
-		type: new GraphQLNonNull(GraphQLString)
-	},
-	langNative: {
-		type: new GraphQLNonNull(GraphQLString)
-	},
-	langTarget: {
-		type: new GraphQLNonNull(GraphQLString)
-	},
-	topic: {
-		type: new GraphQLNonNull(GraphQLString)
-	},
-	user: {
-		type: new GraphQLNonNull(GraphQLID)
+import { boardCreate, boardDelete, boardGet, boardUpdate, boadFindOne } from '@/mongoose'
+import { fieldCreate } from '@/graphql/utilities'
+
+export const boardNodeType = new GraphQLObjectType({
+	name: 'BoardNode',
+	fields: {
+		_id: fieldCreate(GraphQLID),
+		name: fieldCreate(GraphQLString, true),
+		langNative: fieldCreate(GraphQLString, true),
+		langTarget: fieldCreate(GraphQLString, true),
+		topic: fieldCreate(GraphQLString, true),
+		user: fieldCreate(GraphQLID, true)
 	}
-}
+})
 
 export const boardType = new GraphQLObjectType({
-	name: 'board',
-	description: 'Board item',
-	fields: boardFields
+	name: 'Board',
+	fields: {
+		paginate: {
+			type: graphQLPage(boardNodeType),
+			args: graphQLPageArgs,
+			resolve: (root, args: GraphQLPageArgs) => {
+				return boardGet(args)
+			}
+		},
+		getById: {
+			type: boardNodeType,
+			args: {
+				_id: fieldCreate(GraphQLID, true)
+			},
+			resolve: (root, args: GraphQLPageArgs) => {
+				return boadFindOne(args)
+			}
+		}
+	}
 })
 
 export const boardQuery = {
-	type: new GraphQLList(boardType),
-	args: {
-		_id: boardFields._id
-	},
-	resolve: (root, fields, context, fieldASTs) => {
-		const userId = context.user.id
-		const projections = getProjection(fieldASTs)
-		return boardGet({ ...fields, user: userId }, projections)
-	}
+	type: boardType,
+	resolve: () => true
 }
 
 export const boardMutation = {
 	boardCreate: {
-		type: boardType,
+		type: boardNodeType,
 		args: {
-			name: boardFields.name,
-			langNative: boardFields.langNative,
-			langTarget: boardFields.langTarget,
-			topic: boardFields.topic
+			name: fieldCreate(GraphQLString, true),
+			langNative: fieldCreate(GraphQLString, true),
+			langTarget: fieldCreate(GraphQLString, true),
+			topic: fieldCreate(GraphQLString, true)
 		},
 		resolve: (root, vars, context) => {
 			return boardCreate({ ...vars, user: context.user.id })
 		}
 	},
 	boardUpdate: {
-		type: boardType,
+		type: boardNodeType,
 		args: {
-			_id: boardFields._id,
-			name: boardFields.name,
-			langNative: boardFields.langNative,
-			langTarget: boardFields.langTarget,
-			topic: boardFields.topic
+			_id: fieldCreate(GraphQLID, true),
+			name: fieldCreate(GraphQLString, true),
+			langNative: fieldCreate(GraphQLString, true),
+			langTarget: fieldCreate(GraphQLString, true),
+			topic: fieldCreate(GraphQLString, true)
 		},
-		resolve: (root, vars, context) => {
-			return boardUpdate({ ...vars, user: context.user.id })
+		resolve: (root, args, context) => {
+			return boardUpdate({ ...args, user: context.user.id })
 		}
 	},
 	boardDelete: {
-		type: boardType,
+		type: boardNodeType,
 		args: {
-			_id: boardFields._id
+			_id: fieldCreate(GraphQLID, true)
 		},
 		resolve: boardDelete
 	}

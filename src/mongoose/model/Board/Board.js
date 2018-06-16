@@ -1,4 +1,7 @@
 import mongoose from 'mongoose'
+
+import { applyPagination } from '@/mongoose/utilities'
+
 import { Word } from '../Word'
 
 const { Schema } = mongoose
@@ -18,16 +21,12 @@ const boardSchema = new Schema(boardFields, options)
 
 export const Board = mongoose.model('Board', boardSchema)
 
-export function boardGet(props, projections) {
-	return new Promise((resolve, reject) => {
-		const params = {}
-		for (const fieldKey in props) {
-			params[fieldKey] = props[fieldKey]
-		}
-		Board.find(params, projections, (error, boards) => {
-			error ? reject(error) : resolve(boards)
-		})
-	})
+export function boadFindOne(args) {
+	return Board.findOne(args).exec()
+}
+
+export function boardGet(args) {
+	return applyPagination(Board, args)
 }
 
 export function boardCreate(props) {
@@ -39,11 +38,11 @@ export function boardCreate(props) {
 	})
 }
 
-export function boardUpdate(props) {
-	const boardEntity = Board.findById(props._id)
+export async function boardUpdate(props) {
 	return new Promise((resolve, reject) => {
-		boardEntity.update(props, (error) => {
-			error ? reject(error) : resolve(props)
+		const boardsByUser = Board.where('user').equals(props.user)
+		boardsByUser.findOneAndUpdate({ _id: props._id }, (error, result) => {
+			error ? reject(error) : resolve(result)
 		})
 	})
 }

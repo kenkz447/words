@@ -38,9 +38,9 @@ export const graphQLPageArgs = {
 	}
 }
 
-export function edge(itemType) {
+export function edge(itemType: GraphQLObjectType) {
 	return new GraphQLObjectType({
-		name: 'Edge',
+		name: `Edge_${itemType.name}`,
 		description: 'Generic edge to allow cursors',
 		fields: () => ({
 			node: { type: itemType },
@@ -60,10 +60,10 @@ export const GraphQLPageInfo = new GraphQLObjectType({
 	})
 })
 
-export function graphQLPage(itemType) {
+export function graphQLPage(itemType: GraphQLObjectType) {
 	const itemEdge = edge(itemType)
 	return new GraphQLObjectType({
-		name: 'GraphQLPage',
+		name: `GraphQLPage_${itemType.name}`,
 		fields: () => ({
 			totalCount: { type: GraphQLInt },
 			edges: { type: new GraphQLList(itemEdge) },

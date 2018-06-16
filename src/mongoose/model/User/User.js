@@ -50,13 +50,7 @@ function saveNewUserToDb(newUser) {
 
 export async function userGet(args: GraphQLPageArgs, projections) {
 	try {
-		const params = {}
-		const { first, after } = args
-
-		for (const fieldKey in args) {
-			params[fieldKey] = args[fieldKey]
-		}
-		const page = await applyPagination({ Model: UserModel, after, first })
+		const page = await applyPagination(UserModel, args)
 		return page
 	} catch (error) {
 		throw new Error(error)

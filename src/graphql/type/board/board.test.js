@@ -5,10 +5,10 @@ import {
 } from 'graphql/type'
 
 import { expect } from 'chai'
-import { boardType } from './board'
+import { boardNodeType } from './board'
 
 describe('GraphQL: User', () => {
-	const boardTypeFields = boardType.getFields()
+	const boardTypeFields = boardNodeType.getFields()
 
 	it('Should have an "_id" field of type ID', () => {
 		expect(boardTypeFields).to.have.property('_id')
